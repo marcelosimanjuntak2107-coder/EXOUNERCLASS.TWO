@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXOUNERCLASS.TWO</title>
+    <style>
+        /* Reset dan variabel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #0d47a1;
+            --accent-color: #ff6d00;
+            --light-color: #e3f2fd;
+            --dark-color: #0d47a1;
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --shadow: 0 4px 6px rgba(13, 71, 161, 0.1);
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-accent: linear-gradient(135deg, #ff6d00, #e65100);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            
+            --bg-color: #f8fbff;
+            --card-bg: #ffffff;
+            --section-bg: #ffffff;
+            --section-alt-bg: #e3f2fd;
+        }
+
+        /* Dark Mode Variables - DIPERBAIKI: Warna teks lebih kontras */
+        .dark-mode {
+            --primary-color: #4dabf7;
+            --secondary-color: #1971c2;
+            --accent-color: #ff922b;
+            --light-color: #1e293b;
+            --text-color: #f1f5f9; /* Lebih terang untuk kontras lebih baik */
+            --light-text: #f8fafc; /* Lebih terang */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, #1e3a8a, #0d47a1);
+            --gradient-accent: linear-gradient(135deg, #f76707, #e65100);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --section-bg: #1e293b;
+            --section-alt-bg: #334155;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-color);
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--primary-color);
+            color: var(--light-text);
+            transform: rotate(15deg);
+        }
+
+        .theme-toggle-btn .fa-sun {
+            display: none;
+        }
+
+        .dark-mode .theme-toggle-btn .fa-moon {
+            display: none;
+        }
+
+        .dark-mode .theme-toggle-btn .fa-sun {
+            display: block;
+        }
+
+        /* Admin Login Button */
+        .admin-login-btn {
+            position: fixed;
+            top: 160px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--accent-color);
+        }
+
+        .admin-login-btn button {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+
+        .admin-login-btn button:hover {
+            background: var(--accent-color);
+            color: var(--light-text);
+            transform: rotate(15deg);
+        }
+
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 400px;
+            border: 3px solid var(--primary-color);
+            color: var(--text-color); /* DIPERBAIKI: Memastikan teks terbaca */
+        }
+
+        .login-modal h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .login-buttons button {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+        }
+
+        .btn-cancel {
+            background: var(--light-color);
+            color: var(--text-color);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-cancel:hover {
+            background: var(--text-color);
+            color: var(--light-text);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .admin-nav h2 {
+            font-size: 1.5rem;
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .admin-section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* DIPERBAIKI: Kontras untuk card admin */
+        .admin-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent-color);
+            color: var(--text-color); /* Memastikan teks terbaca */
+        }
+
+        .admin-card h4 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color); /* DIPERBAIKI: Warna teks yang kontras */
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card-bg); /* DIPERBAIKI: Menggunakan card-bg */
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-admin {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--gradient-accent);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .admin-list {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* DIPERBAIKI: Kontras untuk list item */
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-color);
+            color: var(--text-color); /* Memastikan teks terlihat */
+        }
+
+        .admin-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .list-actions button {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Pesan Styles */
+        .message-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--light-color);
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .message-date {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .message-subject {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .message-content {
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .message-email {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        /* Map Styles */
+        .map-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 100%;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            border: none;
+        }
+
+        .location-info {
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            height: 100%;
+        }
+
+        .location-info h4 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .location-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .location-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .location-text h5 {
+            color: var(--secondary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .location-text p {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        /* Header dan Navigasi */
+        header {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--light-text);
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ffcc00;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+       /* Hero Section - DIUBAH: Background tetap (tidak ikut scroll) */
+.hero {
+    background: url('https://uploads.onecompiler.io/443ryn8a2/443ryjq5y/WhatsApp%20Image%202025-11-01%20at%2023.33.31_2728473a.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Background tetap saat scroll */
+    background-repeat: no-repeat;
+    color: var(--light-text);
+    padding: 5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh; /* Pastikan tinggi minimal viewport */
+    display: flex;
+    align-items: center;
+}
+
+/* Tambahkan efek parallax untuk konten */
+.hero .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    transform: translateZ(0); /* Mempercepat rendering */
+}
+
+/* Overlay gelap untuk meningkatkan keterbacaan teks */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--gradient-accent);
+            color: var(--light-text);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(255, 109, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 109, 0, 0.4);
+        }
+
+        /* Section umum */
+        section {
+            padding: 4rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-accent);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* Wali Kelas */
+        .wali-kelas {
+            background-color: var(--section-bg);
+        }
+
+        .wali-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* DIPERBAIKI: Kontras untuk wali kelas */
+        .wali-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            text-align: center;
+            width: 300px;
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary-color);
+            color: var(--text-color); /* Warna teks yang konsisten */
+        }
+
+        .wali-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(13, 71, 161, 0.2);
+        }
+
+        .wali-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 5px solid var(--light-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .wali-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .wali-card p {
+            color: var(--text-color);
+            opacity: 0.9; /* DIPERBAIKI: Meningkatkan opacity */
+        }
+
+        /* Struktur Kelas */
+        .struktur-kelas {
+            background: var(--section-alt-bg);
+        }
+
+        .struktur-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        /* DIPERBAIKI: Kontras untuk struktur kelas */
+        .struktur-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            width: 250px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-top: 4px solid var(--accent-color);
+            color: var(--text-color); /* Memastikan teks terbaca */
+        }
+
+        .struktur-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(13, 71, 161, 0.2);
+        }
+
+        .struktur-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        /* DIPERBAIKI: Teks biru diubah menjadi putih pada mode dark */
+        .struktur-card p {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Dark mode: ubah teks biru menjadi putih */
+        .dark-mode .struktur-card p {
+            color: var(--light-text);
+        }
+
+        /* Anggota Kelas */
+        .anggota-kelas {
+            background-color: var(--section-bg);
+        }
+
+        .anggota-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* DIPERBAIKI: Kontras untuk anggota kelas */
+        .anggota-card {
+            background: var(--light-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+            border: 2px solid transparent;
+            color: var(--text-color); /* Warna teks yang kontras */
+        }
+
+        .anggota-card:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(13, 71, 161, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .anggota-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .anggota-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* Galeri */
+        .galeri {
+            background: var(--section-alt-bg);
+        }
+
+        .galeri-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .galeri-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .galeri-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(13, 71, 161, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .galeri-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .galeri-item:hover .galeri-img {
+            transform: scale(1.05);
+        }
+
+        /* DIPERBAIKI: Kontras untuk galeri */
+        .galeri-caption {
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-color); /* Memastikan teks terbaca */
+        }
+
+        .galeri-caption h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .galeri-caption p {
+            color: var(--text-color);
+            opacity: 0.9; /* DIPERBAIKI: Meningkatkan opacity untuk keterbacaan */
+            font-size: 0.9rem;
+        }
+
+        /* Kontak */
+        .kontak {
+            background-color: var(--section-bg);
+        }
+
+        .kontak-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .kontak-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .kontak-info h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* DIPERBAIKI: Kontras untuk kontak */
+        .kontak-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            color: var(--text-color); /* Warna teks yang tepat */
+        }
+
+        .kontak-item:hover {
+            background-color: var(--light-color);
+        }
+
+        .kontak-item i {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            color: var(--primary-color);
+        }
+
+        .kontak-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        /* DIPERBAIKI: Placeholder yang lebih terlihat */
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        /* Lokasi Sekolah - DIUBAH: Peta di samping informasi */
+        .lokasi-sekolah {
+            background: var(--section-alt-bg);
+        }
+
+        .lokasi-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .lokasi-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border: none;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .social-links a {
+            color: var(--light-text);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            background: var(--light-text);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--gradient-primary);
+                padding: 1rem 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 0;
+                text-align: center;
+                padding: 0.5rem 0;
+            }
+
+            .logo-img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo {
+                font-size: 1.6rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .anggota-container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .galeri-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .theme-toggle,
+            .admin-login-btn {
+                top: 90px;
+                right: 15px;
+            }
+
+            .admin-login-btn {
+                top: 150px;
+            }
+
+            .admin-nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .anggota-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .anggota-card img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .galeri-container {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .theme-toggle,
+            .admin-login-btn {
+                top: 80px;
+                right: 10px;
+            }
+
+            .admin-login-btn {
+                top: 140px;
+            }
+
+            .theme-toggle-btn,
+            .admin-login-btn button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
+
+            .login-modal-content {
+                padding: 1.5rem;
+            }
+
+            .login-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-toggle-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Admin Login Button -->
+    <div class="admin-login-btn">
+        <button id="adminLoginBtn">
+            <i class="fas fa-user-cog"></i>
+        </button>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <h2>Login Khusus Admin!</h2>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="error-message" id="loginError">
+                    Username atau password salah!
+                </div>
+                <div class="login-buttons">
+                    <button type="submit" class="btn-login">Login</button>
+                    <button type="button" class="btn-cancel" id="cancelLogin">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <div class="admin-nav">
+                <h2>Panel Admin EXOUNERCLASS.TWO</h2>
+                <div class="admin-controls">
+                    <button class="btn-admin" onclick="showAdminSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </button>
+                    <button class="btn-admin" onclick="showAdminSection('content')">
+                        <i class="fas fa-edit"></i> Kelola Konten
+                    </button>
+                    <button class="btn-admin" onclick="showAdminSection('messages')">
+                        <i class="fas fa-envelope"></i> Pesan Masuk
+                    </button>
+                    <button class="btn-admin btn-danger" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section" id="dashboardSection">
+            <h3>Dashboard</h3>
+            <div class="admin-grid">
+                <div class="admin-card">
+                    <h4>Statistik Website</h4>
+                    <p>Total Anggota: <strong id="totalMembers">36 siswa</strong></p>
+                    <p>Total Foto Galeri: <strong>12 foto</strong></p>
+                    <p>Pesan Masuk: <strong id="totalMessages">0 pesan</strong></p>
+                    <p>Status: <span style="color: var(--success-color);">Aktif</span></p>
+                </div>
+                <div class="admin-card">
+                    <h4>Quick Actions</h4>
+                    <button class="btn-admin" onclick="showAdminSection('content')">
+                        Edit Profil Kelas
+                    </button>
+                    <button class="btn-admin" onclick="showAdminSection('gallery')">
+                        Kelola Galeri
+                    </button>
+                    <button class="btn-admin" onclick="showAdminSection('members')">
+                        Kelola Anggota
+                    </button>
+                    <button class="btn-admin" onclick="showAdminSection('messages')">
+                        Lihat Pesan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section" id="contentSection" style="display: none;">
+            <h3>Kelola Konten Website</h3>
+            <div class="admin-grid">
+                <div class="admin-card">
+                    <h4>Profil Kelas</h4>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="className">Nama Kelas</label>
+                            <input type="text" id="className" value="EXOUNERCLASS.TWO">
+                        </div>
+                        <div class="form-group">
+                            <label for="classDescription">Deskripsi Kelas</label>
+                            <textarea id="classDescription">Kami adalah siswa kelas XII IPS 2 SMA Negeri 5 pematang Siantar angkatan 2025. Kelas ini jadi rumah kedua buat kami tempat belajar bareng, ketawa bareng, dan tumbuh bareng. Di sini bukan cuma tentang pelajaran, tapi juga tentang cerita, kenangan, dan persahabatan yang bakal selalu di ingat.</textarea>
+                        </div>
+                        <button type="submit" class="btn-admin btn-success">Simpan Perubahan</button>
+                    </form>
+                </div>
+                <div class="admin-card">
+                    <h4>Struktur Kelas</h4>
+                    <form id="structureForm">
+                        <div class="form-group">
+                            <label for="ketuaKelas">Ketua Kelas</label>
+                            <input type="text" id="ketuaKelas" value="Salomo Rizky M.Tua Sihombing">
+                        </div>
+                        <div class="form-group">
+                            <label for="wakilKelas">Wakil Ketua</label>
+                            <input type="text" id="wakilKelas" value="Bulan Angelita">
+                        </div>
+                        <div class="form-group">
+                            <label for="sekretaris">Sekretaris</label>
+                            <input type="text" id="sekretaris" value="Putri Figda Tanaos">
+                        </div>
+                        <div class="form-group">
+                            <label for="bendahara">Bendahara</label>
+                            <input type="text" id="bendahara" value="Occa Aprillia">
+                        </div>
+                        <button type="submit" class="btn-admin btn-success">Update Struktur</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section" id="gallerySection" style="display: none;">
+            <h3>Kelola Galeri</h3>
+            <div class="admin-card">
+                <h4>Tambah Foto Baru</h4>
+                <form id="galleryForm">
+                    <div class="form-group">
+                        <label for="photoTitle">Judul Foto</label>
+                        <input type="text" id="photoTitle" placeholder="Masukkan judul foto">
+                    </div>
+                    <div class="form-group">
+                        <label for="photoUrl">URL Foto</label>
+                        <input type="url" id="photoUrl" placeholder="https://example.com/foto.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="photoDescription">Deskripsi</label>
+                        <textarea id="photoDescription" placeholder="Deskripsi foto"></textarea>
+                    </div>
+                    <button type="submit" class="btn-admin btn-success">Tambah ke Galeri</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="admin-section" id="membersSection" style="display: none;">
+            <h3>Kelola Anggota Kelas</h3>
+            <div class="admin-card">
+                <h4>Tambah Anggota Baru</h4>
+                <form id="memberForm">
+                    <div class="form-group">
+                        <label for="memberName">Nama Lengkap</label>
+                        <input type="text" id="memberName" placeholder="Nama anggota">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhoto">URL Foto</label>
+                        <input type="url" id="memberPhoto" placeholder="https://example.com/foto.jpg">
+                    </div>
+                    <button type="submit" class="btn-admin btn-success">Tambah Anggota</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bagian Baru: Kelola Pesan -->
+        <div class="admin-section" id="messagesSection" style="display: none;">
+            <h3>Pesan Masuk</h3>
+            <div class="admin-card">
+                <h4>Daftar Pesan</h4>
+                <div id="messagesList">
+                    <!-- Pesan akan ditampilkan di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp_Image_2025-11-01_at_14.03.28_14d53704-removebg-preview%20(1)%20(1).png" alt="Logo EXOUNERCLASS.TWO" class="logo-img">
+                    <div class="logo">EXOUNER<span>CLASS.TWO</span></div>
+                </div>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#Profil-Kelas">Beranda</a></li>
+                        <li><a href="#wali-kelas">Wali Kelas</a></li>
+                        <li><a href="#struktur-kelas">Struktur Kelas</a></li>
+                        <li><a href="#anggota-kelas">Anggota Kelas</a></li>
+                        <li><a href="#galeri">Galeri</a></li>
+                        <li><a href="#lokasi">Lokasi</a></li>
+                        <li><a href="#kontak">Kontak</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section / Beranda -->
+    <section id="Profil-Kelas" class="hero">
+        <div class="container">
+            <h1>Selamat Datang Di EXOUNERCLASS.TWO</h1>
+            <p id="classDescriptionText">Kami adalah siswa kelas XII IPS 2 Di SMA Negeri 5 Pematang Siantar angkatan 2025. Kelas ini jadi rumah kedua buat kami tempat belajar bareng, ketawa bareng, dan tumbuh bareng.
+               Di sini bukan cuma tentang pelajaran, tapi juga tentang cerita, kenangan, dan persahabatan yang bakal selalu di ingat.</p>
+            <a href="#anggota-kelas" class="btn">Kenali Anggota Kelas</a>
+        </div>
+    </section>
+
+    <!-- Wali Kelas -->
+    <section id="wali-kelas" class="wali-kelas">
+        <div class="container">
+            <h2 class="section-title">Wali Kelas</h2>
+            <div class="wali-container">
+                <div class="wali-card">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2011.11.54_e33b3767.jpg" alt="Wali Kelas 1" class="wali-img">
+                    <h3>Mam Dzulhidjah, S.Pd</h3>
+                    <p>Wali Kelas Di Kelas X-XI</p>
+                    <p>Guru Bahasa Inggris</p>
+                </div>
+                <div class="wali-card">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2011.06.25_f17c4398.jpg" alt="Wali Kelas 2" class="wali-img">
+                    <h3>Frank Trianasari, S.Pd, M.M</h3>
+                    <p>Wali Kelas Di Kelas XII </p>
+                    <p>Guru PPKN (Pendidikan Pancasila dan Kewarganegaraan)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Struktur Kelas -->
+    <section id="struktur-kelas" class="struktur-kelas">
+        <div class="container">
+            <h2 class="section-title">Struktur Kelas</h2>
+            <div class="struktur-container">
+                <div class="struktur-card">
+                    <h3 id="ketuaText">Salomo Rizky M.Tua Sihombing</h3>
+                    <p>Ketua Kelas</p>
+                </div>
+                <div class="struktur-card">
+                    <h3 id="wakilText">Bulan Angelita</h3>
+                    <p>Wakil Ketua Kelas</p>
+                </div>
+                <div class="struktur-card">
+                    <h3 id="sekretarisText">Putri Figda Tanaos</h3>
+                    <p>Sekretaris</p>
+                </div>
+                <div class="struktur-card">
+                    <h3 id="bendaharaText">Occa Aprillia</h3>
+                    <p>Bendahara</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anggota Kelas -->
+    <section id="anggota-kelas" class="anggota-kelas">
+        <div class="container">
+            <h2 class="section-title">Anggota Kelas IPS 2</h2>
+            <div class="anggota-container" id="anggotaList">
+                <!-- Anggota akan dimuat secara dinamis -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri -->
+    <section id="galeri" class="galeri">
+        <div class="container">
+            <h2 class="section-title">Galeri Kenangan Kelas IPS 2</h2>
+            <div class="galeri-container">
+                <!-- Semua foto galeri dikembalikan -->
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2021.55.12_e31bcba4.jpg" alt="Foto Angkatan Kelas" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Foto Angkatan Kelas</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443y87mak/WhatsApp%20Image%202025-11-08%20at%2000.27.48_f675c385.jpg" alt="Foto Angkatan Kelas" class="galeri-img"> 
+                    <div class="galeri-caption">
+                        <h3>Pembawa Upacara </h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2022.14.27_fc5c20f2.jpg" alt="Sabtu Kreasi" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Sabtu Kreasi</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2021.55.11_e14074d3.jpg" alt="Foto Angkatan" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Foto Angkatan IPS 2</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2021.55.13_3f25b622.jpg" alt="Pentas Seni" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Pentas Seni</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2021.55.13_bf161354.jpg" alt="Hari Terakhir Di Sekolah" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Hari Terakhir DI Sekolah :(</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2021.55.11_e7eaaa8a.jpg" alt="Pensiun Mam Dzul" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Foto Bersama Di Hari Pensiun Mam Dzul</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443y87mak/WhatsApp%20Image%202025-11-01%20at%2013.23.42_0974a63e.jpg" alt="Foto Pensi" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Teacher Day</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2013.59.27_e3354e49.jpg" alt="Lomba Memasak Antar Kelas" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Lomba Memasak Antar Kelas</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2014.34.15_24b4f65c.jpg" alt="Batik Day" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Batik Day</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2014.21.23_72dbae23.jpg" alt="English Day" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>English Day</h3>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp%20Image%202025-11-06%20at%2014.41.38_d86725a5.jpg" alt="Osis Cup" class="galeri-img">
+                    <div class="galeri-caption">
+                        <h3>Osis Cup</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lokasi Sekolah - DIUBAH: Peta di samping informasi lokasi -->
+    <section id="lokasi" class="lokasi-sekolah">
+        <div class="container">
+            <h2 class="section-title">Lokasi Sekolah</h2>
+            <div class="lokasi-content">
+                <div class="location-info">
+                    <h4>SMA Negeri 5 Pematang Siantar</h4>
+                    <div class="location-details">
+                        <div class="location-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="location-text">
+                                <h5>Alamat</h5>
+                                <p>Jalan Medan No.Km. 6.8, Tanjung Tongah, Tj. Tongah, Kec. Siantar Martoba, Kota Pematang Siantar, Sumatera Utara 21138</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="location-text">
+                                <h5>Telepon</h5>
+                                <p>-</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="location-text">
+                                <h5>Email</h5>
+                                <p>-</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div class="location-text">
+                                <h5>Akreditasi</h5>
+                                <p>A (Unggul)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.343374951902!2d99.08059247348918!3d3.001930554043086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3031846d9f2e6ebf%3A0x614c47af4ac7de70!2sSekolah%20Menengah%20Atas%20Negeri%205%20Pematangsiantar!5e0!3m2!1sid!2sid!4v1762444077718!5m2!1sid!2sid" 
+                        class="map-frame" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kontak -->
+    <section id="kontak" class="kontak">
+        <div class="container">
+            <h2 class="section-title">Kontak Kami</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--secondary-color); font-size: 1.1rem;">
+                Ada pertanyaan? Kirim Pesan di sini.
+            </p>
+            <div class="kontak-container">
+                <!-- Bagian Informasi Kontak dihilangkan -->
+                <div class="kontak-form" style="margin: 0 auto;">
+                    <h3>Kirim Pesan/Saran</h3>
+                    <form id="formKontak">
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap</label>
+                            <input type="text" id="nama" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pesan">Pesan</label>
+                            <textarea id="pesan" name="pesan" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://uploads.onecompiler.io/443ryn8a2/443tpebs3/WhatsApp_Image_2025-11-01_at_14.03.28_14d53704-removebg-preview%20(1)%20(1).png" alt="Logo EXOUNERCLASS.TWO" class="footer-logo-img">
+                <div class="logo">EXOUNER<span>CLASS.TWO</span></div>
+            </div>
+            <p>We Are Together!</p>
+            <div class="social-links">
+                <a href="javascript:void(0)" onclick="openInstagramSafe()">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <div class="copyright">
+                &copy; 2022-2025 EXOUNERCLASS.TWO. All Rights Reserved.-M
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Data awal - DIPERBAIKI: Struktur array yang benar
+    const initialMembers = [
+        { name: "Ahmad Hidayah Tullah", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.51_16e9fde6.jpg" },
+        { name: "Alex Renovan Lubis", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.55_5c6e317e.jpg" },
+        { name: "Arga Budianto Hutabarat", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.55_79833d70.jpg" },
+        { name: "Bulan Angelita", photo: "" },
+        { name: "Cari Rezeki Gilbet Gulo", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.52_85dec751.jpg" },
+        { name: "Chaesyah Tri Yolanda", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.44_7e9d087d.jpg" },
+        { name: "Danu Prayoga", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.47_87f1ab2f.jpg" },
+        { name: "Dewy Rani Simbolon", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.43_7102e6e0.jpg" },
+        { name: "Dina Putri Jelita Pasaribu", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.41_251cf490.jpg" },
+        { name: "Dio Vykar Herlangga", photo: "" }, // Dio dipindah setelah Dina
+        { name: "Dwi Arsyka", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.17_4af395e4.jpg" },
+        { name: "Erwin Panjaitan", photo: "" }, // Erwin dipindah setelah Dwi
+        { name: "Esti Erlinda Manalu", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.17_87ce1e69.jpg" },
+        { name: "Fahmi Agraha Tan", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.46_7f5337e6.jpg" },
+        { name: "Favian Azaky Pratama", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.44_57aedd64.jpg" },
+        { name: "Febriand Nabil Pratama", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.56_7c94f7de.jpg" },
+        { name: "Gusmawati Zai", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.16_8e0e383a.jpg" },
+        { name: "Intan Aulia", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.16_05f93339.jpg" },
+        { name: "Jastin Gabriel Nainggolan", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.56_83a8ac4a.jpg" },
+        { name: "Johanna Andrista Takosi Hutabarat", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.15_f571ce7d.jpg" },
+        { name: "Kamelia", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.15_2c4af56e.jpg" },
+        { name: "Marcelo Galileo Simanjuntak", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.49_5507765c.jpg" },
+        { name: "Muhammad Affan Hafidsyah", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.45_154ddfd4.jpg" },
+        { name: "Muhammad Ar Fiza", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.58_5e8e5327.jpg" },
+        { name: "Nadira Alika Zahra", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.14_cd4f571c.jpg" },
+        { name: "Nazwa Rifay Pulungan", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.54_3ef58869.jpg" },
+        { name: "Occa Aprillia", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.14_f49c0880.jpg" },
+        { name: "Putri Figda Tanaos", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.15_607f3bb2.jpg" },
+        { name: "Raden Rahmatsya", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.58_d6df6529.jpg" },
+        { name: "Rafa Isnaini Sitorus", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.13_67b26106.jpg" },
+        { name: "Rencana Cristian Ginting", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.50_55f959f4.jpg" },
+        { name: "Reza Dwi Cana", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.54_85dc1cff.jpg" },
+        { name: "Salomo Rizky M.Tua Sihombing", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.56_c302d7b8.jpg" },
+        { name: "Satria Pratama", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.57_ff76d166.jpg" },
+        { name: "Silvia", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.13_df54d196.jpg" },
+        { name: "Tri Aprillia", photo: "https://uploads.onecompiler.io/443ryn8a2/443rz8gm6/WhatsApp%20Image%202025-11-05%20at%2023.04.12_bdbc2c5d.jpg" }
+    ];
+
+    // Load data dari localStorage atau gunakan data awal
+    let members = JSON.parse(localStorage.getItem('classMembers')) || initialMembers;
+    
+    // Data untuk pesan
+    let messages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Cek dark mode dari localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        body.classList.add('dark-mode');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+    });
+
+    // Admin Login System
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const loginModal = document.getElementById('loginModal');
+    const cancelLogin = document.getElementById('cancelLogin');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const adminPanel = document.getElementById('adminPanel');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Kredensial admin - DIPERBAIKI: Menambahkan akun admin kedua
+    const adminCredentials = [
+        {
+            username: "admin1",
+            password: "exouner2025",
+        },
+        {
+            username: "admin2",
+            password: "exounerclass2025",
+        }
+    ];
+
+    adminLoginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'block';
+    });
+
+    cancelLogin.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        loginError.style.display = 'none';
+        loginForm.reset();
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Periksa apakah kredensial cocok dengan salah satu akun admin
+        const isValidAdmin = adminCredentials.some(admin => 
+            admin.username === username && admin.password === password
+        );
+
+        if (isValidAdmin) {
+            loginModal.style.display = 'none';
+            adminPanel.style.display = 'block';
+            loginError.style.display = 'none';
+            loginForm.reset();
+            document.body.style.overflow = 'hidden';
+            // Tampilkan dashboard secara default
+            showAdminSection('dashboard');
+        } else {
+            loginError.style.display = 'block';
+        }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        adminPanel.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Fungsi untuk menampilkan section admin
+    function showAdminSection(section) {
+        // Sembunyikan semua section
+        const sections = ['dashboard', 'content', 'gallery', 'members', 'messages'];
+        sections.forEach(sec => {
+            const sectionElement = document.getElementById(sec + 'Section');
+            if (sectionElement) {
+                sectionElement.style.display = 'none';
+            }
+        });
+        
+        // Tampilkan section yang dipilih
+        const targetSection = document.getElementById(section + 'Section');
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
+        
+        // Update statistik atau data jika diperlukan
+        if (section === 'dashboard') {
+            updateDashboardStats();
+        } else if (section === 'messages') {
+            renderMessages();
+        }
+    }
+
+    // Update dashboard statistics
+    function updateDashboardStats() {
+        document.getElementById('totalMembers').textContent = members.length + ' siswa';
+        document.getElementById('totalMessages').textContent = messages.length + ' pesan';
+    }
+
+    // Fungsi untuk render anggota
+    function renderMembers() {
+        const container = document.getElementById('anggotaList');
+        container.innerHTML = '';
+        
+        members.forEach(member => {
+            const card = document.createElement('div');
+            card.className = 'anggota-card';
+            
+            if (member.photo) {
+                card.innerHTML = `
+                    <img src="${member.photo}" alt="${member.name}" onerror="this.style.display='none'">
+                    <h3>${member.name}</h3>
+                `;
+            } else {
+                card.innerHTML = `<h3>${member.name}</h3>`;
+            }
+            
+            container.appendChild(card);
+        });
+    }
+
+    // Fungsi untuk render pesan
+    function renderMessages() {
+        const container = document.getElementById('messagesList');
+        
+        if (messages.length === 0) {
+            container.innerHTML = '<div class="no-messages"><i class="fas fa-inbox"></i><p>Belum ada pesan yang masuk</p></div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        
+        // Urutkan pesan dari yang terbaru
+        const sortedMessages = [...messages].reverse();
+        
+        sortedMessages.forEach((message, index) => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message-item';
+            messageElement.innerHTML = `
+                <div class="message-header">
+                    <div class="message-sender">${message.nama}</div>
+                    <div class="message-date">${message.date}</div>
+                </div>
+                <div class="message-content">${message.pesan}</div>
+                <div class="message-email">${message.email}</div>
+            `;
+            container.appendChild(messageElement);
+        });
+    }
+
+    // Form kontak - DIPERBAIKI: Menghilangkan field subjek
+    const formKontak = document.getElementById('formKontak');
+    formKontak.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const nama = document.getElementById('nama').value;
+        const email = document.getElementById('email').value;
+        const pesan = document.getElementById('pesan').value;
+        
+        const newMessage = {
+            nama,
+            email,
+            pesan,
+            date: new Date().toLocaleDateString('id-ID', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        };
+        
+        messages.push(newMessage);
+        localStorage.setItem('contactMessages', JSON.stringify(messages));
+        
+        alert('Pesan berhasil dikirim!');
+        formKontak.reset();
+    });
+
+    // Mobile menu
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const navUl = document.querySelector('nav ul');
+
+    mobileMenu.addEventListener('click', () => {
+        navUl.classList.toggle('show');
+    });
+
+    // Fungsi untuk membuka Instagram dengan aman
+    function openInstagramSafe() {
+        const confirmed = confirm('Anda akan meninggalkan halaman ini dan membuka Instagram. Lanjutkan?');
+        if (confirmed) {
+            window.open('https://instagram.com', '_blank');
+        }
+    }
+
+    // Inisialisasi saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        renderMembers();
+        updateDashboardStats();
+        
+        // Event listener untuk form admin
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const classDescription = document.getElementById('classDescription').value;
+                document.getElementById('classDescriptionText').textContent = classDescription;
+                alert('Profil kelas berhasil diperbarui!');
+            });
+        }
+        
+        const structureForm = document.getElementById('structureForm');
+        if (structureForm) {
+            structureForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                document.getElementById('ketuaText').textContent = document.getElementById('ketuaKelas').value;
+                document.getElementById('wakilText').textContent = document.getElementById('wakilKelas').value;
+                document.getElementById('sekretarisText').textContent = document.getElementById('sekretaris').value;
+                document.getElementById('bendaharaText').textContent = document.getElementById('bendahara').value;
+                alert('Struktur kelas berhasil diperbarui!');
+            });
+        }
+        
+        const memberForm = document.getElementById('memberForm');
+        if (memberForm) {
+            memberForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const memberName = document.getElementById('memberName').value;
+                const memberPhoto = document.getElementById('memberPhoto').value;
+                
+                if (memberName) {
+                    members.push({ name: memberName, photo: memberPhoto });
+                    localStorage.setItem('classMembers', JSON.stringify(members));
+                    renderMembers();
+                    updateDashboardStats();
+                    alert('Anggota berhasil ditambahkan!');
+                    memberForm.reset();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
